@@ -1,4 +1,4 @@
-import { Fragment, h, VNode } from './index';
+import { Fragment, h, VNode } from './index.js';
 
 type PropsWithKey = Record<string, any> & { key?: any };
 

@@ -20,6 +20,7 @@ const App = () =>
   h('button', { onClick: () => count.set(c => c + 1) },
     () => \"Count: \", () => count.get())`,
   View: () => {
+      console.log('🔥 CounterExample.View executed');
     const count = signal(0);
     return h(
       'div',
@@ -63,7 +64,10 @@ const App = () => h('div', null,
         'div',
         { class: 'row' },
         h('button', { class: 'btn', onClick: () => count.set((c) => c + 1) }, 'Tick'),
-        h('span', { class: 'pill' }, () => `count = ${count.get()}`)
+        h('span', { class: 'pill' }, () => {
+            console.log('⚡ reactive child ran');
+            return `Count: ${count.get()}`;
+        })
       ),
       h(
         'div',

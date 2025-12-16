@@ -1,2 +1,2 @@
-export * from './signals';
-export * from './dom';
+export * from './signals.js';
+export * from './dom.js';

@@ -1,6 +1,6 @@
 import { __DEV__, Disposer, devWarn, isArray, isFunction } from '@atomica/shared';
 import { effect } from '@atomica/signals';
-import { getDevHooks } from './devhooks';
+import { getDevHooks } from './devhooks.js';
 
 export type Component<P = {}> = (props: P & { children?: any }) => VNodeChild;
 
@@ -330,7 +330,7 @@ function mountTextVNode(vnode: VNode, ctx: RenderContext): MountedChild {
   };
 }
 
-function mountText(value: string): MountedChild {
+function mountText(value: string, _ctx: RenderContext): MountedChild {
   const node = document.createTextNode(value);
   // No ctx here; dev hook only fires if globally configured.
   getDevHooks()?.onDomMutation?.([node], 'insert');

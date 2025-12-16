@@ -266,3 +266,149 @@ export function untrack<T>(fn: () => T): T {
 }
 
 export type { Dep as Node, SignalNode, ComputedNode, EffectNode };
+
+// Resource
+export type ResourceState = 'idle' | 'loading' | 'success' | 'error';
+
+export interface ResourceOptions<T> {
+  auto?: boolean;
+  keepPreviousData?: boolean;
+  initialData?: T;
+  onSuccess?: (value: T) => void;
+  onError?: (err: unknown) => void;
+}
+
+export interface ResourceContext {
+  signal?: AbortSignal;
+}
+
+export type ResourceProducer<T> = (ctx: ResourceContext) => Promise<T>;
+
+export interface Resource<T> {
+  data(): T | undefined;
+  error(): unknown | undefined;
+  loading(): boolean;
+  state(): ResourceState;
+  refresh(): Promise<void>;
+  mutate(next: T | ((prev?: T) => T)): void;
+  clear(): void;
+  dispose(): void;
+}
+
+export function resource<T>(
+  producer: ResourceProducer<T>,
+  options: ResourceOptions<T> = {}
+): Resource<T> {
+  const keepPreviousData = options.keepPreviousData ?? true;
+  const dataSig = signal<T | undefined>(options.initialData);
+  const errorSig = signal<unknown | undefined>(undefined);
+  const loadingSig = signal<boolean>(false);
+  const stateSig = signal<ResourceState>(options.initialData !== undefined ? 'success' : 'idle');
+
+  let version = 0;
+  let controller: AbortController | null = null;
+  let disposed = false;
+  let autoDispose: Disposer | null = null;
+
+  const refresh = async (): Promise<void> => {
+    if (disposed) return;
+    const current = ++version;
+    if (controller) {
+      controller.abort();
+    }
+    controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+
+    untrack(() => {
+      loadingSig.set(true);
+      stateSig.set('loading');
+      errorSig.set(undefined);
+      if (!keepPreviousData) {
+        dataSig.set(undefined);
+      }
+    });
+
+    try {
+      const result = await producer({ signal: controller?.signal });
+      if (disposed || current !== version) return;
+      untrack(() => {
+        dataSig.set(result);
+        loadingSig.set(false);
+        stateSig.set('success');
+        options.onSuccess?.(result);
+      });
+    } catch (err: any) {
+      if (disposed || current !== version) return;
+      if (err && err.name === 'AbortError') {
+        return;
+      }
+      untrack(() => {
+        if (!keepPreviousData) {
+          dataSig.set(undefined);
+        }
+        loadingSig.set(false);
+        stateSig.set('error');
+        errorSig.set(err);
+        options.onError?.(err);
+      });
+    }
+  };
+
+  const mutate = (next: T | ((prev?: T) => T)) => {
+    if (disposed) return;
+    untrack(() => {
+      dataSig.set(isFunction(next) ? (next as (prev?: T) => T)(dataSig.peek()) : next);
+      loadingSig.set(false);
+      stateSig.set('success');
+      errorSig.set(undefined);
+    });
+  };
+
+  const clear = () => {
+    if (disposed) return;
+    if (controller) {
+      controller.abort();
+    }
+    version += 1;
+    untrack(() => {
+      dataSig.set(undefined);
+      errorSig.set(undefined);
+      loadingSig.set(false);
+      stateSig.set('idle');
+    });
+  };
+
+  const doDispose = () => {
+    if (disposed) return;
+    disposed = true;
+    if (controller) {
+      controller.abort();
+    }
+    untrack(() => {
+      loadingSig.set(false);
+      stateSig.set('idle');
+    });
+  };
+
+  if (options.auto) {
+    autoDispose = effect(() => {
+      refresh();
+    });
+  }
+
+  return {
+    data: () => dataSig.get(),
+    error: () => errorSig.get(),
+    loading: () => loadingSig.get(),
+    state: () => stateSig.get(),
+    refresh,
+    mutate,
+    clear,
+    dispose: () => {
+      if (autoDispose) {
+        autoDispose();
+        autoDispose = null;
+      }
+      doDispose();
+    }
+  };
+}
