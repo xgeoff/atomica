@@ -1,39 +1,81 @@
-# Atomica v0.1 (WIP)
+# Atomica v0.1 — Detailed Overview
 
-Atomica is a tiny signals-driven view library with fine-grained DOM bindings. This snapshot follows the public API spec used by the Codex tasks.
+Atomica is a tiny, signal-first view library with fine-grained DOM bindings. Components are plain functions; state changes update only the nodes that depend on that state. No renders, no lifecycles, no hooks.
+
+## Doctrine: What Atomica Refuses to Be
+- No re-renders by default; components execute once at construction
+- No lifecycles/hooks; effects are explicit reactions
+- Reactivity is explicit (`() => expr`); no hidden subscriptions
+- JSX is optional, compile-time sugar only
+- Not a meta-framework (no router, data layer, styling system)
+- Avoids magic; no scheduler/priorities you didn’t ask for
+
+See `docs/what-atomica-refuses.md` for the full design constraints.
 
 ## Packages
-- `atomica` – public entry that re-exports `signals` and `dom` helpers
-- `atomica/signals` – signals, computed values, effects, batching utilities
-- `atomica/dom` – VNode factory (`h`), DOM renderer, and bindings
+- `atomica` — public barrel, re-exporting DOM + signals
+- `atomica/signals` — signals, computed, effect, batch, untrack, resource, diagnostics
+- `atomica/dom` — VNode factory (`h`), renderer, bindings, context, mount/unmount
+- `atomica/shared` — utilities and dev diagnostics plumbing
 
 ## Core APIs
 
 ### Signals
 ```ts
-import { signal, computed, effect, batch, untrack } from 'atomica/signals';
+import { signal, computed, effect, batch, untrack, resource } from 'atomica/signals';
 ```
-- `signal<T>(value)` returns `{ get, set, peek }`
-- `computed(fn)` returns memoized `{ get, peek }`
-- `effect(fn)` runs immediately, re-runs on dependency changes, and returns `dispose()`
-- `batch(fn)` coalesces effect flushes until `fn` finishes
-- `untrack(fn)` executes without dependency collection
+- `signal<T>(value)` → `{ get, set, peek }`
+- `computed(fn)` → lazy memo `{ get, peek }`
+- `effect(fn)` → runs immediately, re-runs on dependency changes; returns `dispose()`
+- `batch(fn)` → coalesces effect flushes until `fn` finishes
+- `untrack(fn)` → run without dependency collection
+- `resource(producer, options?)` → async state machine (manual or `auto`), latest-wins, abortable
 
 ### DOM
 ```ts
-import { h, mount, Fragment } from 'atomica/dom';
+import { h, mount, Fragment, context } from 'atomica/dom';
 ```
-- `h(type, props, ...children)` creates a VNode (type is tag or component function)
-- `fragment(...children)`/`Fragment` groups children
+- `h(type, props, ...children)` creates a VNode (tag or component fn)
+- `fragment(...children)` / `Fragment` groups children
 - `text(value)` forces a text VNode
-- `mount(vnode | Component, container, options?)` renders into a container and returns `dispose()`
+- `mount(vnode | Component, container, options?)` renders and returns `dispose()`
+- `context(defaultValue, options?)` → lexical, synchronous context; not reactive unless you pass signals
 - Any prop/child value that is a function `() => X` becomes a live binding
 
-## Reactive bindings
+### Reactive bindings
 - Attributes/props: `h('div', { class: () => theme.get() })`
 - Text/children: `h('p', null, 'Value: ', () => count.get())`
-- Keyed lists inside dynamic regions use `key` to preserve DOM nodes.
+- Keyed lists in dynamic regions use `key` to preserve DOM identity
 
-## Development notes
-- `options.dev` on `mount` enables extra warnings (missing keys, component stack hints)
-- Hydration is defined on the API but currently mounts normally.
+### Diagnostics (dev-only)
+- `window.__ATOMICA_DEV__` (dev builds) tracks:
+  - component constructions
+  - signal update count
+  - computed run count
+- Purely observational; no runtime influence. Absent in production.
+
+## Playgrounds and Examples
+- `examples/counter` — minimal signal + binding demo
+- `examples/playground` — living spec:
+  - Counter baseline
+  - No re-render proof (component count stays 1)
+  - Keyed list stability
+  - Derived state (lazy computed)
+  - Context snapshot (lexical, non-reactive unless signaled)
+  - Diagnostics card showing dev counters
+
+## Build/Test
+- `pnpm build` — builds all packages and examples
+- `pnpm test` — runs Vitest suites (signals, dom)
+- `pnpm --filter @atomica/playground dev` — start playground
+- `pnpm --filter @atomica/example-counter dev` — start counter example
+
+## Status (v0.1 locked)
+- Components execute once; fine-grained updates only
+- Signals/computed/effect/batch/untrack stable
+- DOM renderer with bindings, keyed diff, mount/unmount
+- Resource (async) and context (lexical) added under v0.2 scope
+- Diagnostics prove invariants in dev mode
+
+## Future (v0.2 design targets)
+- Keep Atomica small; any new feature must respect the doctrine above.

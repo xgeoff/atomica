@@ -2,6 +2,8 @@
 
 Signal-first, fine-grained UI toolkit with zero React baggage.
 
+More details: xgeoff.github.io/atomica
+
 ## What is it?
 
 Atomica is a tiny view library built on signals. Components are plain functions; DOM updates are localized through bindings, not full re-renders. The goal: predictable, fast updates with an API you can learn in minutes.
@@ -38,6 +40,7 @@ mount(h(Counter, {}), document.getElementById('app')!);
 - **Keyed lists**: `key` on VNodes preserves DOM identity in dynamic regions.
 - **Dev mode**: Warnings for missing keys and component render errors; hydration API stubbed for future work.
 - **JSX is optional**: Core uses `h()`; JSX, when used, compiles directly to `h()` via a tiny adapter—no runtime JSX logic.
+- **Diagnostics-first**: Dev-only counters prove components run once, signals drive updates, and computeds stay lazy.
 
 ## Repo layout
 
@@ -45,14 +48,16 @@ mount(h(Counter, {}), document.getElementById('app')!);
 - `packages/signals` — reactive core
 - `packages/dom` — VNode + renderer + bindings
 - `packages/shared` — utilities
-- `examples/counter` — demo app (Vite)
-- `docs` — short walkthrough
+- `examples/counter` — minimal demo (Vite)
+- `examples/playground` — live playground proving invariants and bindings
+- `docs` — short walkthrough + doctrine
 
 ## Scripts
 
-- `npm run build` — build all packages
-- `npm run test` — run package tests (uses Vitest)
-- `npm run dev:example` — start the counter example
+- `pnpm build` — build all packages/examples
+- `pnpm test` — run package tests (Vitest)
+- `pnpm --filter @atomica/example-counter dev` — start the counter example
+- `pnpm --filter @atomica/playground dev` — start the playground
 
 ## Status
 
