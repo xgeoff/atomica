@@ -1,0 +1,36 @@
+{
+  "name": "atomica",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dom": {
+      "import": "./dist/dom.js",
+      "types": "./dist/dom.d.ts"
+    },
+    "./signals": {
+      "import": "./dist/signals.js",
+      "types": "./dist/signals.d.ts"
+    },
+    "./dom/jsx-runtime": {
+      "import": "./dist/dom-jsx-runtime.js",
+      "types": "./dist/dom-jsx-runtime.d.ts"
+    },
+    "./dom/jsx-dev-runtime": {
+      "import": "./dist/dom-jsx-runtime.js",
+      "types": "./dist/dom-jsx-runtime.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@atomica/dom": "workspace:*",
+    "@atomica/signals": "workspace:*"
+  }
+}

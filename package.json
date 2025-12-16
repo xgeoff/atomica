@@ -1,0 +1,22 @@
+{
+  "name": "atomica-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "npm run --workspaces build",
+    "test": "npm run --workspaces --if-present test",
+    "lint": "npm run --workspaces --if-present lint",
+    "dev:example": "npm --prefix examples/counter run dev"
+  },
+  "devDependencies": {
+    "happy-dom": "^12.10.3",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.0",
+    "vitest": "^0.34.6",
+    "@types/node": "^20.10.0"
+  }
+}

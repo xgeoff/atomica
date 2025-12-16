@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2020", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "atomica": ["packages/atomica/src/index.ts"],
+      "atomica/dom": ["packages/atomica/src/dom.ts"],
+      "atomica/signals": ["packages/atomica/src/signals.ts"],
+      "atomica/dom/jsx-runtime": ["packages/atomica/src/dom-jsx-runtime.ts"],
+      "atomica/dom/jsx-dev-runtime": ["packages/atomica/src/dom-jsx-runtime.ts"],
+      "atomica/shared": ["packages/shared/src/index.ts"],
+      "@atomica/shared": ["packages/shared/src/index.ts"],
+      "@atomica/signals": ["packages/signals/src/index.ts"],
+      "@atomica/dom": ["packages/dom/src/index.ts"]
+    }
+  }
+}
