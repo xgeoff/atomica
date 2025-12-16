@@ -2,7 +2,7 @@
 
 Signal-first, fine-grained UI toolkit with zero React baggage.
 
-More details: xgeoff.github.io/atomica
+More details: https://xgeoff.github.io/atomica
 
 ## What is it?
 
