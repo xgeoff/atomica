@@ -1,5 +1,5 @@
 import { computed, effect, signal } from 'atomica/signals';
-import { Fragment, h, mount } from 'atomica/dom';
+import { Fragment, context, h, mount } from 'atomica/dom';
 import './style.css';
 
 interface Example {
@@ -178,11 +178,92 @@ h('div', null,
   }
 };
 
+const ContextExample: Example = {
+  id: 'context',
+  title: 'Context (lexical, snapshot)',
+  summary: 'Provide values without prop threading; not reactive unless you pass signals',
+  code: `const Theme = context('light')
+
+Theme.provide('dark', () => h(App))`,
+  View: () => {
+    const Theme = context('light');
+    const themeSignal = signal('dark');
+
+    const Provided = () =>
+      Theme.provide(themeSignal.get(), () =>
+        h(
+          'div',
+          { class: 'stack' },
+          h('p', null, 'Context snapshot: ', Theme.use()),
+          h('p', null, 'Root signal: ', () => themeSignal.get()),
+          h('p', { class: 'note' }, 'Changing the signal does NOT change the snapshot context.'),
+          h(
+            'button',
+            {
+              class: 'btn',
+              onClick: () => themeSignal.set((t) => (t === 'dark' ? 'light' : 'dark'))
+            },
+            'Toggle root signal'
+          ),
+          Theme.provide('paper', () =>
+            h('div', { class: 'box' }, 'Nested override: ', Theme.use())
+          )
+        )
+      );
+
+    return h('div', { class: 'stack' }, h(Provided, {}));
+  }
+};
+
+const DiagnosticsExample: Example = {
+  id: 'diagnostics',
+  title: 'Diagnostics (dev-only counters)',
+  summary: 'Prove no re-renders: components stay at 1, signals/computeds increment',
+  code: `// Inspect window.__ATOMICA_DEV__ for counters\nconst count = signal(0)\nconst doubled = computed(() => count.get() * 2)`,
+  View: () => {
+    const count = signal(0);
+    const doubled = computed(() => count.get() * 2);
+    const dev = (globalThis as any).__ATOMICA_DEV__;
+
+    const getCounts = () => {
+      const components =
+        dev?.components &&
+        Array.from(dev.components.values()).reduce((a: number, b: number) => a + b, 0);
+      const computeds =
+        dev?.computeds &&
+        Array.from(dev.computeds.values()).reduce((a: number, b: number) => a + b, 0);
+      const signals = dev?.signals?.updates ?? undefined;
+      return { components, signals, computeds };
+    };
+
+    return h(
+      'div',
+      { class: 'stack' },
+      h('div', { class: 'row' },
+        h('button', { class: 'btn', onClick: () => count.set((c) => c + 1) }, 'Increment'),
+        h('span', { class: 'pill' }, () => `count = ${count.get()}`),
+        h('span', { class: 'pill' }, () => `doubled = ${doubled.get()}`)
+      ),
+      h('p', { class: 'note' }, 'Component constructions remain 1; counters below move'),
+      h(
+        'div',
+        { class: 'note' },
+        () => {
+          const { components, signals, computeds } = getCounts();
+          return `components: ${components ?? '-'}, signal updates: ${signals ?? '-'}, computed runs: ${computeds ?? '-'}`;
+        }
+      )
+    );
+  }
+};
+
 const examples: Example[] = [
   CounterExample,
   NoRerenderExample,
   KeyedListExample,
-  DerivedStateExample
+  DerivedStateExample,
+  ContextExample,
+  DiagnosticsExample
 ];
 
 const App = () =>

@@ -1,4 +1,10 @@
-import { __DEV__, Disposer, devWarn, isFunction } from '@atomica/shared';
+import {
+  __DEV__,
+  Disposer,
+  devWarn,
+  isFunction,
+  getDevDiagnostics
+} from '@atomica/shared';
 
 export interface ReadonlySignal<T> {
   get(): T;
@@ -26,6 +32,7 @@ interface ComputedNode<T> {
   deps: Set<Dep>;
   subscribers: Set<Observer>;
   cleanup?: Disposer;
+  debugName?: string;
 }
 
 interface EffectNode {
@@ -42,6 +49,7 @@ let batchDepth = 0;
 let flushScheduled = false;
 let flushing = false;
 const effectQueue: EffectNode[] = [];
+const dev = getDevDiagnostics();
 
 const queueMicro =
   typeof queueMicrotask === 'function'
@@ -149,6 +157,9 @@ function evaluateComputed<T>(node: ComputedNode<T>): T {
     const next = node.fn();
     node.value = next;
     node.dirty = false;
+    if (dev) {
+      dev.computedRun(node.debugName);
+    }
     return next;
   } finally {
     node.evaluating = false;
@@ -178,6 +189,7 @@ export function signal<T>(initial: T): Signal<T> {
         return;
       }
       node.value = value;
+      dev?.signalUpdate();
       markDirty(node);
       if (batchDepth === 0) {
         flushEffects();

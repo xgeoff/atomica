@@ -1,6 +1,8 @@
 import { __DEV__, Disposer, devWarn, isArray, isFunction } from '@atomica/shared';
 import { effect } from '@atomica/signals';
+import { initDevDiagnostics, getDevDiagnostics } from '@atomica/shared';
 import { getDevHooks } from './devhooks.js';
+export { context } from './context.js';
 
 export type Component<P = {}> = (props: P & { children?: any }) => VNodeChild;
 
@@ -102,6 +104,10 @@ export function mount(
 
   if (options?.hydrate) {
     devWarn('Hydration is not implemented yet; mounting normally.');
+  }
+
+  if (ctx.dev) {
+    initDevDiagnostics();
   }
 
   const vnode = isFunction(root) ? h(root as Component, {}) : (root as VNode);
@@ -226,6 +232,7 @@ function mountComponent(vnode: VNode, ctx: RenderContext): MountedChild {
   let rendered: VNodeChild;
   try {
     if (ctx.dev) {
+      getDevDiagnostics()?.component(componentFn.name || 'component');
       getDevHooks()?.onComponentRender?.(componentFn);
     }
     rendered = componentFn({ ...(vnode.props || {}), children: vnode.props?.children });
