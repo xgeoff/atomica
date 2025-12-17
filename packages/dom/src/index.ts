@@ -2,6 +2,7 @@ import { __DEV__, Disposer, devWarn, isArray, isFunction } from '@atomica/shared
 import { effect } from '@atomica/signals';
 import { initDevDiagnostics, getDevDiagnostics } from '@atomica/shared';
 import { getDevHooks } from './devhooks.js';
+// PUBLIC API — v0.2 LOCKED
 export { context } from './context.js';
 
 export type Component<P = {}> = (props: P & { children?: any }) => VNodeChild;
@@ -46,6 +47,7 @@ interface RenderContext {
 
 const mountedContainers = new WeakMap<Element, Disposer>();
 
+// PUBLIC API — v0.2 LOCKED
 export function h<P>(
   type: VNodeType<P>,
   props: (P & { children?: VNodeChild[]; key?: Key }) | null,
@@ -98,8 +100,9 @@ export function mount(
   container: Element,
   options?: MountOptions
 ): Disposer {
+  const devMode = __DEV__ && (options?.dev ?? __DEV__);
   const ctx: RenderContext = {
-    dev: options?.dev ?? __DEV__
+    dev: devMode
   };
 
   if (options?.hydrate) {
@@ -643,4 +646,5 @@ function toKebab(value: string): string {
   return value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
+// PUBLIC API — v0.2 LOCKED
 export { Fragment, TextNode };

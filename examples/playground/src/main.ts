@@ -1,5 +1,6 @@
+// Playground examples reflect LOCKED v0.2 semantics
 import { computed, effect, signal } from 'atomica/signals';
-import { Fragment, context, h, mount } from 'atomica/dom';
+import { context, h, mount } from 'atomica/dom';
 import './style.css';
 
 interface Example {
@@ -20,7 +21,6 @@ const App = () =>
   h('button', { onClick: () => count.set(c => c + 1) },
     () => \"Count: \", () => count.get())`,
   View: () => {
-      console.log('🔥 CounterExample.View executed');
     const count = signal(0);
     return h(
       'div',
@@ -64,10 +64,7 @@ const App = () => h('div', null,
         'div',
         { class: 'row' },
         h('button', { class: 'btn', onClick: () => count.set((c) => c + 1) }, 'Tick'),
-        h('span', { class: 'pill' }, () => {
-            console.log('⚡ reactive child ran');
-            return `Count: ${count.get()}`;
-        })
+        h('span', { class: 'pill' }, () => `Count: ${count.get()}`)
       ),
       h(
         'div',
@@ -271,9 +268,9 @@ const App = () =>
     'main',
     { class: 'page' },
     h('header', { class: 'hero' },
-      h('p', { class: 'eyebrow' }, 'Atomica Playground'),
-      h('h1', null, 'Feel the model before v0.2'),
-      h('p', { class: 'lede' }, 'Each example shows fine-grained updates without re-renders. Code is read-only; output is live.')
+      h('p', { class: 'eyebrow' }, 'Atomica Playground — v0.2 locked'),
+      h('h1', null, 'See the frozen semantics in action'),
+      h('p', { class: 'lede' }, 'Each example shows fine-grained updates without re-renders. Code is read-only; output is live and matches the contract.')
     ),
     h('section', { class: 'grid' },
       examples.map((example) =>

@@ -3,9 +3,11 @@ import {
   Disposer,
   devWarn,
   isFunction,
-  getDevDiagnostics
+  getDevDiagnostics,
+  initDevDiagnostics
 } from '@atomica/shared';
 
+// PUBLIC API — v0.2 LOCKED
 export interface ReadonlySignal<T> {
   get(): T;
   peek(): T;
@@ -49,7 +51,10 @@ let batchDepth = 0;
 let flushScheduled = false;
 let flushing = false;
 const effectQueue: EffectNode[] = [];
-const dev = getDevDiagnostics();
+const devDiagnostics = (): ReturnType<typeof getDevDiagnostics> => {
+  if (!__DEV__) return null;
+  return getDevDiagnostics() ?? initDevDiagnostics();
+};
 
 const queueMicro =
   typeof queueMicrotask === 'function'
@@ -157,9 +162,7 @@ function evaluateComputed<T>(node: ComputedNode<T>): T {
     const next = node.fn();
     node.value = next;
     node.dirty = false;
-    if (dev) {
-      dev.computedRun(node.debugName);
-    }
+    devDiagnostics()?.computedRun(node.debugName);
     return next;
   } finally {
     node.evaluating = false;
@@ -167,6 +170,7 @@ function evaluateComputed<T>(node: ComputedNode<T>): T {
   }
 }
 
+// PUBLIC API — v0.2 LOCKED
 export function signal<T>(initial: T): Signal<T> {
   const node: SignalNode<T> = {
     value: initial,
@@ -189,7 +193,7 @@ export function signal<T>(initial: T): Signal<T> {
         return;
       }
       node.value = value;
-      dev?.signalUpdate();
+      devDiagnostics()?.signalUpdate();
       markDirty(node);
       if (batchDepth === 0) {
         flushEffects();
@@ -198,6 +202,7 @@ export function signal<T>(initial: T): Signal<T> {
   };
 }
 
+// PUBLIC API — v0.2 LOCKED
 export function computed<T>(fn: () => T): ReadonlySignal<T> {
   const node: ComputedNode<T> = {
     type: 'computed',
@@ -231,6 +236,7 @@ export function computed<T>(fn: () => T): ReadonlySignal<T> {
   return api;
 }
 
+// PUBLIC API — v0.2 LOCKED
 export function effect(fn: () => void | Disposer): () => void {
   const node: EffectNode = {
     type: 'effect',
@@ -255,6 +261,7 @@ export function effect(fn: () => void | Disposer): () => void {
   return disposer;
 }
 
+// INTERNAL — support batching for bindings; not part of the locked public surface.
 export function batch(fn: () => void): void {
   batchDepth += 1;
   try {
@@ -277,9 +284,10 @@ export function untrack<T>(fn: () => T): T {
   }
 }
 
+// INTERNAL — graph nodes are exposed for testing only.
 export type { Dep as Node, SignalNode, ComputedNode, EffectNode };
 
-// Resource
+// PUBLIC API — v0.2 LOCKED
 export type ResourceState = 'idle' | 'loading' | 'success' | 'error';
 
 export interface ResourceOptions<T> {

@@ -4,15 +4,17 @@ Signal-first, fine-grained UI toolkit with zero React baggage.
 
 More details: https://xgeoff.github.io/atomica
 
+> If you are about to add a new primitive, stop. Build a real app first.
+
 ## What is it?
 
 Atomica is a tiny view library built on signals. Components are plain functions; DOM updates are localized through bindings, not full re-renders. The goal: predictable, fast updates with an API you can learn in minutes.
 
 ## Packages
 
-- `atomica` — public entry that re-exports DOM + signals
-- `atomica/signals` — `signal`, `computed`, `effect`, `batch`, `untrack`
-- `atomica/dom` — `h`, `fragment/Fragment`, `text`, `mount`, `unmount`, bindings
+- `atomica` — public entry that re-exports DOM + signals (v0.2 locked)
+- `atomica/signals` — `signal`, `computed`, `effect`, `resource` (helpers `batch`/`untrack` are internal escape hatches)
+- `atomica/dom` — `h`, `fragment/Fragment`, `text`, `mount`, `unmount`, `context`, bindings
 
 ## Quick start
 
@@ -61,4 +63,4 @@ mount(h(Counter, {}), document.getElementById('app')!);
 
 ## Status
 
-Atomica v0.1 is a work-in-progress reference implementation. Public API is intentionally small; internals are kept private behind exports maps.
+Atomica v0.2.0-alpha semantics are locked per `docs/v0.2-design-contract.md`; see `CHANGELOG.md` for the frozen surface area. Diagnostics stay dev-only, and no new primitives are accepted without a real-app proof point.

@@ -46,7 +46,7 @@ describe('resource', () => {
     expect(r.error()).toBeUndefined();
   });
 
-  it('ignores stale refreshes and aborts previous requests', async () => {
+  it('commits only the latest refresh when earlier promises resolve later', async () => {
     let resolveFirst: (v: number) => void = () => {};
     let resolveSecond: (v: number) => void = () => {};
     const producer = vi
@@ -69,10 +69,10 @@ describe('resource', () => {
     const p1 = r.refresh();
     const p2 = r.refresh();
 
-    resolveFirst(1);
     resolveSecond(2);
-    await p1;
     await p2;
+    resolveFirst(1);
+    await p1;
 
     expect(r.data()).toBe(2);
     expect(r.state()).toBe('success');

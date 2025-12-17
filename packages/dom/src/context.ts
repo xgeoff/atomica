@@ -1,5 +1,6 @@
 import { __DEV__, invariant } from '@atomica/shared';
 
+// PUBLIC API — v0.2 LOCKED
 export interface Context<T> {
   use(): T;
   provide<R>(value: T, fn: () => R): R;

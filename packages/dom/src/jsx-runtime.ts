@@ -2,6 +2,7 @@ import { Fragment, h, VNode } from './index.js';
 
 type PropsWithKey = Record<string, any> & { key?: any };
 
+// PUBLIC API — v0.2 LOCKED
 export function jsx(type: any, props: PropsWithKey, key?: any): VNode {
   const finalProps = key === undefined ? props : { ...props, key };
   return h(type, finalProps);

@@ -29,6 +29,26 @@ describe('signals core', () => {
     expect(spy).toHaveBeenCalledTimes(2);
   });
 
+  it('does not re-run computeds until they are read', () => {
+    const base = signal(1);
+    const spy = vi.fn(() => base.get() * 3);
+    const triple = computed(spy);
+
+    base.set(2);
+    base.set(3);
+    expect(spy).toHaveBeenCalledTimes(0);
+
+    expect(triple.get()).toBe(9);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    base.set(4);
+    base.set(5);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    expect(triple.get()).toBe(15);
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
+
   it('runs effects with cleanup and disposes', () => {
     const count = signal(0);
     const cleanup = vi.fn();
