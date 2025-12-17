@@ -2,6 +2,8 @@
 
 Atomica is a tiny, signal-first view library with fine-grained DOM bindings. Components are plain functions; state changes update only the nodes that depend on that state. No renders, no lifecycles, no hooks.
 
+Repository: https://github.com/xgeoff/atomica
+
 ## Core Doctrine
 - No re-renders by default; components execute once at construction.
 - No lifecycles/hooks; effects are explicit reactions.
