@@ -11,10 +11,10 @@ Atomica is a tiny, signal-first view library with fine-grained DOM bindings. Com
 - Avoids magic; no scheduler/priorities you didn’t ask for.
 
 ## Document Map
-- `docs/what-atomica-refuses.md` — doctrine and non-goals.
-- `docs/v0.2-design-contract.md` — authoritative v0.2 invariants and upgrade policy.
-- `docs/how-to-think-in-atomica.md` — mental model for React-minded engineers.
-- `docs/samples/*.ts` — minimal runnable snippets used in docs/playground (counter, no-rerender, keyed list).
+- [What Atomica Refuses](what-atomica-refuses.html) — doctrine and non-goals.
+- [v0.2 Design Contract](v0.2-design-contract.html) — authoritative invariants and upgrade policy.
+- [How to Think in Atomica](how-to-think-in-atomica.html) — mental model for React-minded engineers.
+- Sample code used in docs/playground (counter, no-rerender, keyed list): see `docs/samples/*.ts`.
 
 ## Packages
 - `atomica` — public barrel, re-exporting DOM + signals
