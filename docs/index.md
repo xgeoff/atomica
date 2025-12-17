@@ -1,16 +1,20 @@
-# Atomica v0.1 — Detailed Overview
+# Atomica v0.2 — Overview and Map
 
 Atomica is a tiny, signal-first view library with fine-grained DOM bindings. Components are plain functions; state changes update only the nodes that depend on that state. No renders, no lifecycles, no hooks.
 
-## Doctrine: What Atomica Refuses to Be
-- No re-renders by default; components execute once at construction
-- No lifecycles/hooks; effects are explicit reactions
-- Reactivity is explicit (`() => expr`); no hidden subscriptions
-- JSX is optional, compile-time sugar only
-- Not a meta-framework (no router, data layer, styling system)
-- Avoids magic; no scheduler/priorities you didn’t ask for
+## Core Doctrine
+- No re-renders by default; components execute once at construction.
+- No lifecycles/hooks; effects are explicit reactions.
+- Reactivity is explicit (`() => expr`); no hidden subscriptions.
+- JSX is optional, compile-time sugar only.
+- Not a meta-framework (no router, data layer, styling system).
+- Avoids magic; no scheduler/priorities you didn’t ask for.
 
-See `docs/what-atomica-refuses.md` for the full design constraints.
+## Document Map
+- `docs/what-atomica-refuses.md` — doctrine and non-goals.
+- `docs/v0.2-design-contract.md` — authoritative v0.2 invariants and upgrade policy.
+- `docs/how-to-think-in-atomica.md` — mental model for React-minded engineers.
+- `docs/samples/*.ts` — minimal runnable snippets used in docs/playground (counter, no-rerender, keyed list).
 
 ## Packages
 - `atomica` — public barrel, re-exporting DOM + signals
@@ -18,7 +22,7 @@ See `docs/what-atomica-refuses.md` for the full design constraints.
 - `atomica/dom` — VNode factory (`h`), renderer, bindings, context, mount/unmount
 - `atomica/shared` — utilities and dev diagnostics plumbing
 
-## Core APIs
+## Core APIs (v0.2)
 
 ### Signals
 ```ts
@@ -55,20 +59,13 @@ import { h, mount, Fragment, context } from 'atomica/dom';
 - Purely observational; no runtime influence. Absent in production.
 
 ## Playgrounds and Examples
-- `examples/counter` — minimal signal + binding demo
-- `examples/playground` — living spec:
-  - Counter baseline
-  - No re-render proof (component count stays 1)
-  - Keyed list stability
-  - Derived state (lazy computed)
-  - Context snapshot (lexical, non-reactive unless signaled)
-  - Diagnostics card showing dev counters
+- `examples/counter` — minimal signal + binding demo. Run: `pnpm --filter @atomica/example-counter dev`.
+- `examples/playground` — living spec proving invariants. Run: `pnpm --filter @atomica/playground dev`.
+- `examples/github-issues` — real app with resource/context/diagnostics under v0.2. Run: `pnpm --filter @atomica/example-github-issues dev`.
 
 ## Build/Test
 - `pnpm build` — builds all packages and examples
 - `pnpm test` — runs Vitest suites (signals, dom)
-- `pnpm --filter @atomica/playground dev` — start playground
-- `pnpm --filter @atomica/example-counter dev` — start counter example
 
 ## Status (v0.1 locked)
 - Components execute once; fine-grained updates only
@@ -77,5 +74,5 @@ import { h, mount, Fragment, context } from 'atomica/dom';
 - Resource (async) and context (lexical) added under v0.2 scope
 - Diagnostics prove invariants in dev mode
 
-## Future (v0.2 design targets)
-- Keep Atomica small; any new feature must respect the doctrine above.
+## Future (v0.2 semantics locked)
+- Semantics are frozen per `docs/v0.2-design-contract.md`; ergonomic tweaks must not violate invariants.
