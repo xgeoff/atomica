@@ -6,13 +6,12 @@ type Props = {
 
 export const DiagnosticsPanel = ({ components }: Props) => {
   const tick = signal(0);
+  const dev = (globalThis as any).__ATOMICA_DEV__;
 
   effect(() => {
     const interval = setInterval(() => tick.set((t) => t + 1), 1000);
     return () => clearInterval(interval);
   });
-
-  const dev = (globalThis as any).__ATOMICA_DEV__;
 
   const formatCount = (name: string) => {
     if (!dev?.components) return '-';
@@ -24,6 +23,11 @@ export const DiagnosticsPanel = ({ components }: Props) => {
   const totalComputeds = () => {
     if (!dev?.computeds) return 0;
     return Array.from(dev.computeds.values()).reduce((a: number, b: number) => a + b, 0);
+  };
+
+  const computedEntries = () => {
+    if (!dev?.computeds) return [];
+    return Array.from(dev.computeds.entries());
   };
 
   return h(
@@ -49,6 +53,15 @@ export const DiagnosticsPanel = ({ components }: Props) => {
       tick.get();
       return `Signal updates: ${totalSignals()} | Computed runs: ${totalComputeds()}`;
     }),
+    h('div', { class: 'computeds' },
+      h('p', { class: 'muted' }, 'Computed run counts (by name):'),
+      h('ul', null,
+        () =>
+          computedEntries().map(([name, count]) =>
+            h('li', { key: name }, `${name}: ${count}`)
+          )
+      )
+    ),
     h('p', { class: 'muted' }, 'If these counters grow without interaction, semantics are broken.')
   );
 };

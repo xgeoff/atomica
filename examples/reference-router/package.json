@@ -1,0 +1,18 @@
+{
+  "name": "@atomica/example-reference-router",
+  "private": true,
+  "version": "0.2.0-alpha",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "atomica": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vite": "^5.0.0"
+  }
+}

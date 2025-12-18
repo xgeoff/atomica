@@ -1,0 +1,82 @@
+:root {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+nav a {
+  color: #e2e8f0;
+  margin-right: 0.75rem;
+  text-decoration: none;
+}
+
+nav a.active {
+  color: #22d3ee;
+  font-weight: 700;
+}
+
+.main {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.view h2 {
+  margin-top: 0;
+}
+
+.muted {
+  color: #94a3b8;
+}
+
+.btn {
+  background: #22d3ee;
+  color: #0f172a;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  margin-right: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn.secondary {
+  background: #475569;
+  color: #e2e8f0;
+}
+
+.panel.diagnostics {
+  background: #0b1221;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li.selected {
+  color: #22d3ee;
+}

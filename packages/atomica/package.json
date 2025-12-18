@@ -1,36 +1,48 @@
 {
   "name": "atomica",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha.1",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": ["dist"],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js"
     },
     "./dom": {
-      "import": "./dist/dom.js",
-      "types": "./dist/dom.d.ts"
+      "types": "./dist/dom/index.d.ts",
+      "import": "./dist/dom/index.esm.js",
+      "require": "./dist/dom/index.cjs.js"
     },
     "./signals": {
-      "import": "./dist/signals.js",
-      "types": "./dist/signals.d.ts"
+      "types": "./dist/signals/index.d.ts",
+      "import": "./dist/signals/index.esm.js",
+      "require": "./dist/signals/index.cjs.js"
     },
     "./dom/jsx-runtime": {
-      "import": "./dist/dom-jsx-runtime.js",
-      "types": "./dist/dom-jsx-runtime.d.ts"
+      "types": "./dist/dom/jsx-runtime.d.ts",
+      "import": "./dist/dom/jsx-runtime.esm.js",
+      "require": "./dist/dom/jsx-runtime.cjs.js"
     },
     "./dom/jsx-dev-runtime": {
-      "import": "./dist/dom-jsx-runtime.js",
-      "types": "./dist/dom-jsx-runtime.d.ts"
+      "types": "./dist/dom-jsx-runtime.d.ts",
+      "import": "./dist/dom/jsx-runtime.esm.js",
+      "require": "./dist/dom-jsx-runtime.cjs.js"
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsup",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@atomica/dom": "workspace:*",
     "@atomica/signals": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1"
   }
 }

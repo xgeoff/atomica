@@ -5,6 +5,7 @@ import { createIssuesResource } from './issuesResource';
 import { RepoSelector } from './RepoSelector';
 import { IssueList } from './IssueList';
 import { IssueDetails } from './IssueDetails';
+import { IssueStats } from './IssueStats';
 import { DiagnosticsPanel } from './DiagnosticsPanel';
 
 export const App = () => {
@@ -58,10 +59,14 @@ export const App = () => {
           h('div', { class: 'panel-head' }, h('h2', null, 'Details')),
           h(IssueDetails, { issues, selectedIssue })
         ),
+        h('section', { class: 'panel stats' },
+          h('div', { class: 'panel-head' }, h('h2', null, 'Stats')),
+          h(IssueStats, { issues })
+        ),
         h('section', { class: 'panel diagnostics' },
           h('div', { class: 'panel-head' }, h('h2', null, 'Diagnostics')),
           h(DiagnosticsPanel, {
-            components: ['App', 'RepoSelector', 'IssueList', 'IssueDetails', 'DiagnosticsPanel']
+            components: ['App', 'RepoSelector', 'IssueList', 'IssueDetails', 'IssueStats', 'DiagnosticsPanel']
           })
         )
       ),

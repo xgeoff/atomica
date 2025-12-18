@@ -14,14 +14,18 @@ export type IssuesResource = Resource<Issue[]>;
 
 export function createIssuesResource(repo: RepoSelection): { issues: IssuesResource; state: ReadonlySignal<string> } {
   const stateText = signal('idle');
+  let version = 0;
 
   const issues = resource<Issue[]>(
     async () => {
+      const currentVersion = ++version;
       const owner = repo.owner.get().trim();
       const name = repo.repo.get().trim();
       if (!owner || !name) return [];
       const url = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/issues?state=all&per_page=50`;
       stateText.set(`loading ${owner}/${name}`);
+      // Artificial delay to amplify race conditions during rapid repo switching
+      await new Promise((res) => setTimeout(res, 200));
       const response = await fetch(url, {
         headers: {
           Accept: 'application/vnd.github+json'
@@ -31,6 +35,7 @@ export function createIssuesResource(repo: RepoSelection): { issues: IssuesResou
         throw new Error(`GitHub responded ${response.status}`);
       }
       const data = (await response.json()) as Issue[];
+      if (currentVersion !== version) return []; // stale
       stateText.set(`loaded ${data.length} issues`);
       return data;
     },

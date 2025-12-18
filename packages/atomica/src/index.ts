@@ -1,3 +1,3 @@
 // PUBLIC API — v0.2 LOCKED
-export * from './signals.js';
-export * from './dom.js';
+export * from './signals/index.js';
+export * from './dom/index.js';

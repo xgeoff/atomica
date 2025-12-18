@@ -15,15 +15,23 @@ This sample app pressure-tests Atomica v0.2 semantics with real async data, shar
 - `resource()` is pull-based; manual refresh is explicit, `auto` is opt-in.
 - Diagnostics reflect reality: constructions stay at 1, counters move instead.
 
+## Observed Friction / Surprises
+- Diagnostics are dev-only; polling them requires manual wiring (timer in DiagnosticsPanel).
+- Rapid repo switching relies on latest-wins in resources; there is no implicit cancellation.
+- Comments fetching is a separate resource; wiring multiple resources without a shared store feels verbose but keeps boundaries explicit.
+- Fetching nonexistent/private repos yields 404s; unauthenticated GitHub API is rate-limited.
+- React instincts (waiting for re-renders, expecting context to update by itself) must be unlearned.
+
+These friction points are intentional unless diagnostics demonstrate a correctness or performance issue.
+
 ## Running
 ```bash
 pnpm --filter @atomica/example-github-issues dev
 ```
-Open http://localhost:4174. Use the controls to change owner/repo, switch filters, select issues, and hit Refresh. GitHub’s unauthenticated API is rate-limited; if you hit limits, wait or use a smaller repo.
 Open http://localhost:4174 (or the port Vite prints). Use the controls to change owner/repo, switch filters, select issues, and hit Refresh. GitHub’s unauthenticated API is rate-limited; if you hit limits or see 404s, use a public repo that exists (defaults use facebook/react) or wait for the limit window to reset.
 
 ## Diagnostics output examples
-- Components: `App:1, RepoSelector:1, IssueList:1, IssueDetails:1, DiagnosticsPanel:1`
+- Components: `App:1, RepoSelector:1, IssueList:1, IssueDetails:1, IssueStats:1, DiagnosticsPanel:1`
 - Signals/computeds: `signal updates=12; computed runs=5` (these numbers grow with interaction, components do not)
 
 ## Known awkward or surprising parts
