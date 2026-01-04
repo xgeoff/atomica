@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atomica v0.2 — Overview and Map</title>
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/skeleton-css@2.0.4/css/skeleton.min.css">
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    body {
+      background: #0d1117;
+      color: #e8ecf2;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      padding-bottom: 3rem;
+    }
+
+    a {
+      color: #7bd1ff;
+    }
+
+    a:hover,
+    a:focus {
+      color: #a2e3ff;
+    }
+
+    h1, h2, h3, h4 {
+      color: #f4f6fa;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(123, 209, 255, 0.15), rgba(144, 97, 249, 0.15));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0 2.5rem;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    section {
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: rgba(15, 18, 26, 0.9);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    ul, ol {
+      margin-top: 0.75rem;
+    }
+
+    pre {
+      background: #111827;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 1rem;
+      overflow-x: auto;
+      color: #e8ecf2;
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    .muted {
+      color: #9da7b8;
+      margin-top: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>Atomica v0.2 — Overview and Map</h1>
+      <p class="lead">Atomica is a tiny, signal-first view library with fine-grained DOM bindings. Components are plain functions; state changes update only the nodes that depend on that state. No renders, no lifecycles, no hooks.</p>
+      <p><a href="https://github.com/xgeoff/atomica" target="_blank" rel="noreferrer">Repository: github.com/xgeoff/atomica</a></p>
+    </header>
+
+    <section>
+      <h2>Core Doctrine</h2>
+      <ul>
+        <li>No re-renders by default; components execute once at construction.</li>
+        <li>No lifecycles/hooks; effects are explicit reactions.</li>
+        <li>Reactivity is explicit (<code>() =&gt; expr</code>); no hidden subscriptions.</li>
+        <li>JSX is optional, compile-time sugar only.</li>
+        <li>Not a meta-framework (no router, data layer, styling system).</li>
+        <li>Avoids magic; no scheduler/priorities you didn’t ask for.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Document Map</h2>
+      <ul>
+        <li><a href="what-atomica-refuses.html">What Atomica Refuses</a> — doctrine and non-goals.</li>
+        <li><a href="v0.2-design-contract.html">v0.2 Design Contract</a> — authoritative invariants and upgrade policy.</li>
+        <li><a href="how-to-think-in-atomica.html">How to Think in Atomica</a> — mental model for React-minded engineers.</li>
+        <li>Sample code used in docs/playground (counter, no-rerender, keyed list): see <code>docs/samples/*.ts</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Packages</h2>
+      <ul>
+        <li><code>atomica</code> — public barrel, re-exporting DOM + signals</li>
+        <li><code>atomica/signals</code> — signals, computed, effect, batch, untrack, resource, diagnostics</li>
+        <li><code>atomica/dom</code> — VNode factory (<code>h</code>), renderer, bindings, context, mount/unmount</li>
+        <li><code>atomica/shared</code> — utilities and dev diagnostics plumbing</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Core APIs (v0.2)</h2>
+
+      <h3>Signals</h3>
+      <pre><code class="language-ts">import { signal, computed, effect, batch, untrack, resource } from 'atomica/signals';</code></pre>
+      <ul>
+        <li><code>signal&lt;T&gt;(value)</code> → <code>{ get, set, peek }</code></li>
+        <li><code>computed(fn)</code> → lazy memo <code>{ get, peek }</code></li>
+        <li><code>effect(fn)</code> → runs immediately, re-runs on dependency changes; returns <code>dispose()</code></li>
+        <li><code>batch(fn)</code> → coalesces effect flushes until <code>fn</code> finishes</li>
+        <li><code>untrack(fn)</code> → run without dependency collection</li>
+        <li><code>resource(producer, options?)</code> → async state machine (manual or <code>auto</code>), latest-wins, abortable</li>
+      </ul>
+
+      <h3>DOM</h3>
+      <pre><code class="language-ts">import { h, mount, Fragment, context } from 'atomica/dom';</code></pre>
+      <ul>
+        <li><code>h(type, props, ...children)</code> creates a VNode (tag or component fn)</li>
+        <li><code>fragment(...children)</code> / <code>Fragment</code> groups children</li>
+        <li><code>text(value)</code> forces a text VNode</li>
+        <li><code>mount(vnode | Component, container, options?)</code> renders and returns <code>dispose()</code></li>
+        <li><code>context(defaultValue, options?)</code> → lexical, synchronous context; not reactive unless you pass signals</li>
+        <li>Any prop/child value that is a function <code>() =&gt; X</code> becomes a live binding</li>
+      </ul>
+
+      <h3>Reactive bindings</h3>
+      <ul>
+        <li>Attributes/props: <code>h('div', { class: () =&gt; theme.get() })</code></li>
+        <li>Text/children: <code>h('p', null, 'Value: ', () =&gt; count.get())</code></li>
+        <li>Keyed lists in dynamic regions use <code>key</code> to preserve DOM identity</li>
+      </ul>
+
+      <h3>Diagnostics (dev-only)</h3>
+      <ul>
+        <li><code>window.__ATOMICA_DEV__</code> (dev builds) tracks:
+          <ul>
+            <li>component constructions</li>
+            <li>signal update count</li>
+            <li>computed run count</li>
+          </ul>
+        </li>
+        <li>Purely observational; no runtime influence. Absent in production.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Playgrounds and Examples</h2>
+      <ul>
+        <li><code>examples/counter</code> — minimal signal + binding demo. Run: <code>pnpm --filter @atomica/example-counter dev</code>.</li>
+        <li><code>examples/playground</code> — living spec proving invariants. Run: <code>pnpm --filter @atomica/playground dev</code>.</li>
+        <li><code>examples/github-issues</code> — real app with resource/context/diagnostics under v0.2. Run: <code>pnpm --filter @atomica/example-github-issues dev</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Build/Test</h2>
+      <ul>
+        <li><code>pnpm build</code> — builds all packages and examples</li>
+        <li><code>pnpm test</code> — runs Vitest suites (signals, dom)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Status (v0.1 locked)</h2>
+      <ul>
+        <li>Components execute once; fine-grained updates only</li>
+        <li>Signals/computed/effect/batch/untrack stable</li>
+        <li>DOM renderer with bindings, keyed diff, mount/unmount</li>
+        <li>Resource (async) and context (lexical) added under v0.2 scope</li>
+        <li>Diagnostics prove invariants in dev mode</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Future (v0.2 semantics locked)</h2>
+      <p>Semantics are frozen per <code>docs/v0.2-design-contract.md</code>; ergonomic tweaks must not violate invariants.</p>
+    </section>
+  </div>
+</body>
+</html>

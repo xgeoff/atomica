@@ -18,6 +18,27 @@ Atomica is a tiny view library built on signals. Components are plain functions;
 
 ## Quick start
 
+index.html
+```html
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Atomica Counter</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Atomica attaches here -->
+<div id="app"></div>
+
+<!-- This loads the compiled JS -->
+<script type="module" src="main.js"></script>
+</body>
+</html>
+```
+main.ts
+
 ```ts
 import { h, mount, signal, computed } from 'atomica';
 
