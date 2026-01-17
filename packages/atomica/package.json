@@ -23,6 +23,11 @@
       "import": "./dist/signals/index.esm.js",
       "require": "./dist/signals/index.cjs.js"
     },
+    "./companion": {
+      "types": "./dist/companion/index.d.ts",
+      "import": "./dist/companion/index.esm.js",
+      "require": "./dist/companion/index.cjs.js"
+    },
     "./dom/jsx-runtime": {
       "types": "./dist/dom/jsx-runtime.d.ts",
       "import": "./dist/dom/jsx-runtime.esm.js",

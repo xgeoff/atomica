@@ -99,7 +99,9 @@
         <li><a href="what-atomica-refuses.html">What Atomica Refuses</a> — doctrine and non-goals.</li>
         <li><a href="v0.2-design-contract.html">v0.2 Design Contract</a> — authoritative invariants and upgrade policy.</li>
         <li><a href="how-to-think-in-atomica.html">How to Think in Atomica</a> — mental model for React-minded engineers.</li>
-        <li>Sample code used in docs/playground (counter, no-rerender, keyed list): see <code>docs/samples/*.ts</code>.</li>
+        <li><a href="companion.html">Companion (Optional)</a> — channels, service wrapper, and registry helpers.</li>
+        <li><a href="search-widget.html">Search Widget Example</a> — how to test the drop-in component sample.</li>
+        <li>Sample code used in docs/playground (counter, no-rerender, keyed list, search widget): see <code>docs/samples/*.ts</code>.</li>
       </ul>
     </section>
 
@@ -107,6 +109,7 @@
       <h2>Packages</h2>
       <ul>
         <li><code>atomica</code> — public barrel, re-exporting DOM + signals</li>
+        <li><code>atomica/companion</code> — optional channels, service wrapper, and registry helpers (opt-in)</li>
         <li><code>atomica/signals</code> — signals, computed, effect, batch, untrack, resource, diagnostics</li>
         <li><code>atomica/dom</code> — VNode factory (<code>h</code>), renderer, bindings, context, mount/unmount</li>
         <li><code>atomica/shared</code> — utilities and dev diagnostics plumbing</li>
@@ -164,6 +167,7 @@
         <li><code>examples/counter</code> — minimal signal + binding demo. Run: <code>pnpm --filter @atomica/example-counter dev</code>.</li>
         <li><code>examples/playground</code> — living spec proving invariants. Run: <code>pnpm --filter @atomica/playground dev</code>.</li>
         <li><code>examples/github-issues</code> — real app with resource/context/diagnostics under v0.2. Run: <code>pnpm --filter @atomica/example-github-issues dev</code>.</li>
+        <li><code>examples/search-widget</code> — drop-in component with encapsulated HTML/CSS/JS. Run: <code>pnpm --filter @atomica/example-search-widget dev</code>.</li>
       </ul>
     </section>
 

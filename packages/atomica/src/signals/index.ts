@@ -1,2 +1,2 @@
 // PUBLIC API — v0.2 LOCKED
-export * from '@atomica/signals';
+export * from '../../../signals/src/index.ts';

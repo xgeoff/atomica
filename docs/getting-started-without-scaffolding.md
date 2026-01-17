@@ -88,7 +88,17 @@ const View = () =>
 - No fetch-on-mount magic, no suspense, no lifecycle hooks.
 - Async work in Atomica is explicit by design.
 
-## 7. Styling and CSS
+## 7. Companion (Optional)
+Companion is a small, opt-in helper built from Atomica primitives.
+```ts
+import { createChannel, createService, registerComponent } from 'atomica';
+```
+- Channels broadcast data to multiple subscribers.
+- The service wrapper is a thin helper around `resource()`.
+- The component registry is useful for diagnostics panels.
+See `docs/companion.md` for usage details.
+
+## 8. Styling and CSS
 - Atomica does not care about styling. Use plain CSS, CSS modules, Tailwind, inline styles—your choice.
 Examples:
 ```ts
@@ -96,17 +106,17 @@ h('div', { class: 'card' }, 'Hello');
 h('div', { style: () => ({ color: 'tomato' }) }, () => `Count: ${count.get()}`);
 ```
 
-## 8. Routing (What Atomica Does and Doesn’t Do)
+## 9. Routing (What Atomica Does and Doesn’t Do)
 - Atomica does not ship a router; routing is state + expressions.
 - A reference router example lives in `examples/reference-router` (built from signals/computed/expressions).
 - Using Atomica does not imply using any particular router.
 
-## 9. How to Grow From Here
+## 10. How to Grow From Here
 - Add more signals where you need them.
 - Add derived state with `computed`.
 - Add async resources where data is needed.
 - Integrate with your existing router or backend.
 
-## 10. What Atomica Refuses to Do (Short Recap)
+## 11. What Atomica Refuses to Do (Short Recap)
 - No render loop, no lifecycle hooks, no meta-framework behavior, no ownership of your architecture.
 - Atomica gives you primitives, not a project.

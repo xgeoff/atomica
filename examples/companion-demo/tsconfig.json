@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "jsx": "preserve",
+    "types": ["vite/client"],
+    "paths": {
+      "atomica": ["../../packages/atomica/dist/index.d.ts"]
+    }
+  },
+  "include": ["src"]
+}

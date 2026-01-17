@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "jsx": "react-jsx",
+    "jsxImportSource": "atomica/dom",
+    "types": ["vite/client"]
+  },
+  "include": ["src/**/*", "vite.config.ts"]
+}

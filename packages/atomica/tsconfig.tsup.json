@@ -2,10 +2,15 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "..",
     "composite": false,
     "incremental": false,
-    "paths": {}
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@atomica/dom": ["../dom/src/index.ts"],
+      "@atomica/signals": ["../signals/src/index.ts"],
+      "@atomica/shared": ["../shared/src/index.ts"]
+    }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "../dom/src/**/*", "../signals/src/**/*", "../shared/src/**/*"]
 }

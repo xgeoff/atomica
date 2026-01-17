@@ -13,8 +13,9 @@
     "baseUrl": ".",
     "paths": {
       "atomica": ["packages/atomica/src/index.ts"],
-      "atomica/dom": ["packages/atomica/src/dom.ts"],
-      "atomica/signals": ["packages/atomica/src/signals.ts"],
+      "atomica/dom": ["packages/atomica/src/dom/index.ts"],
+      "atomica/signals": ["packages/atomica/src/signals/index.ts"],
+      "atomica/companion": ["packages/atomica/src/companion/index.ts"],
       "atomica/dom/jsx-runtime": ["packages/atomica/src/dom-jsx-runtime.ts"],
       "atomica/dom/jsx-dev-runtime": ["packages/atomica/src/dom-jsx-runtime.ts"],
       "atomica/shared": ["packages/shared/src/index.ts"],
