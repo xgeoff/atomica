@@ -61,3 +61,64 @@ If you want JSX, add to `tsconfig.json`:
 ```
 
 JSX compiles to `h(...)`; the mental model stays the same.
+
+## Build output (what you deploy)
+Vite builds a static folder, usually `dist/`, containing plain HTML/CSS/JS assets:
+```
+dist/
+  index.html
+  assets/
+    index-7f3c1c2a.js
+    index-3a8b9d7e.css
+```
+
+The generated `dist/index.html` will look like this (hashed filenames are normal):
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Atomica Site</title>
+    <link rel="stylesheet" href="/assets/index-3a8b9d7e.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/assets/index-7f3c1c2a.js"></script>
+  </body>
+</html>
+```
+
+You can deploy `dist/` to any static host or CDN.
+
+## Custom output names and multiple entry points
+Hashed filenames are the default because they are safe for long-term caching. If you want stable names, configure Vite’s Rollup output:
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/app.js',
+        chunkFileNames: 'assets/chunk-[name].js',
+        assetFileNames: 'assets/[name][extname]'
+      }
+    }
+  }
+});
+```
+
+For multiple entry points, add multiple HTML files. Each HTML file references its own entry module:
+```html
+<!-- index.html -->
+<div id="app"></div>
+<script type="module" src="/src/main.ts"></script>
+
+<!-- admin.html -->
+<div id="admin"></div>
+<script type="module" src="/src/admin.ts"></script>
+```
+
+Vite will build both pages into `dist/` with separate bundles.
