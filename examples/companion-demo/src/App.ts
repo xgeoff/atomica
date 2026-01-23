@@ -11,7 +11,13 @@ const mockFetcher = async (url: string) => {
   });
 };
 
-const service = createService({ fetcher: mockFetcher });
+const token = signal('demo-token');
+const service = createService({
+  fetcher: mockFetcher,
+  headers: () => ({
+    Authorization: `Bearer ${token.get()}`
+  })
+});
 const broadcast = createChannel<{ time: string; value: number; url: string }>();
 
 export const App = () => {

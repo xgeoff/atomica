@@ -34,7 +34,7 @@ channel.subscribe((data) => {
   console.log('fresh data', data);
 });
 ```
-you are registering a listener that runs every time `publish` is called. Nothing runs on subscribe; it only fires on future publishes.
+you are registering a listener function. The parameter (`data`) is not something you pass in — it is the value that will be delivered later when someone calls `publish(...)`. Nothing runs on subscribe; it only fires on future publishes.
 
 ## Service wrapper
 The service wrapper is a thin helper around `resource()`. It has no lifecycle; calls are explicit.
@@ -59,10 +59,13 @@ resource.refresh();
 `createService(options?)` accepts:
 - `baseUrl?: string`
 - `fetcher?: typeof fetch`
+- `headers?: HeadersInit | (() => HeadersInit)`
 
 It returns:
 - `get<T>(path: string, auto = true): { resource: Resource<T>; channel: Channel<T> }`
 - `post<T>(path: string, body: unknown, auto = true): { resource: Resource<T>; channel: Channel<T> }`
+- `put<T>(path: string, body: unknown, auto = true): { resource: Resource<T>; channel: Channel<T> }`
+- `delete<T>(path: string, body?: unknown, auto = true): { resource: Resource<T>; channel: Channel<T> }`
 
 `resource` is the standard Atomica `resource()` result:
 - `data(): T | undefined`
@@ -78,6 +81,16 @@ In the example above:
 - `api.get<T>('/user')` defines the request and returns both a `resource` and a `channel`.
 - `channel.subscribe(...)` listens for each successful response.
 - `resource.refresh()` explicitly triggers the fetch.
+
+To attach auth headers (for example, a JWT), pass a function so the latest token is read at call time:
+```ts
+const api = createService({
+  baseUrl: '/api',
+  headers: () => ({
+    Authorization: `Bearer ${token.get()}`
+  })
+});
+```
 
 ## Component registry
 The registry is a signal-backed set you can use for diagnostics panels.

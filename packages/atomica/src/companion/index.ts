@@ -43,21 +43,30 @@ export type ServiceResponse<T> = {
 export type ServiceOptions = {
   baseUrl?: string;
   fetcher?: typeof fetch;
+  headers?: HeadersInit | (() => HeadersInit);
 };
 
 export function createService(options: ServiceOptions = {}) {
   const fetcher = options.fetcher ?? fetch;
   const base = options.baseUrl ?? '';
+  const getHeaders = () => (typeof options.headers === 'function' ? options.headers() : options.headers);
 
-  const call = <T>(method: 'GET' | 'POST', path: string, body?: unknown, auto = true): ServiceResponse<T> => {
+  const call = <T>(
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    path: string,
+    body?: unknown,
+    auto = true
+  ): ServiceResponse<T> => {
     const channel = createChannel<T>();
     const res = resource<T>(
       async () => {
         const url = `${base}${path}`;
+        const extraHeaders = getHeaders();
         const init: RequestInit = {
           method,
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            ...(extraHeaders ?? {})
           }
         };
         if (body !== undefined) {
@@ -78,7 +87,9 @@ export function createService(options: ServiceOptions = {}) {
 
   return {
     get: <T>(path: string, auto = true) => call<T>('GET', path, undefined, auto),
-    post: <T>(path: string, body: unknown, auto = true) => call<T>('POST', path, body, auto)
+    post: <T>(path: string, body: unknown, auto = true) => call<T>('POST', path, body, auto),
+    put: <T>(path: string, body: unknown, auto = true) => call<T>('PUT', path, body, auto),
+    delete: <T>(path: string, body?: unknown, auto = true) => call<T>('DELETE', path, body, auto)
   };
 }
 
