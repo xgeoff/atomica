@@ -49,6 +49,66 @@ if (root) {
 pnpm dev
 ```
 
+## Base project layout (what this looks like on disk)
+Here is a minimal layout with a few TypeScript modules and a CSS file:
+```
+my-atomica-site/
+  index.html
+  tsconfig.json
+  vite.config.ts
+  src/
+    main.ts
+    widgets/
+      CounterWidget.ts
+    pages/
+      home.ts
+    style.css
+```
+
+Example `index.html` (source):
+```html
+<div id="app"></div>
+<script type="module" src="/src/main.ts"></script>
+```
+
+Example `src/main.ts`:
+```ts
+import { h, mount } from 'atomica';
+import { Home } from './pages/home';
+import './style.css';
+
+const root = document.getElementById('app');
+if (root) mount(h(Home, {}), root);
+```
+
+Example `src/pages/home.ts`:
+```ts
+import { h } from 'atomica';
+import { CounterWidget } from '../widgets/CounterWidget';
+
+export const Home = () =>
+  h('main', null,
+    h('h1', null, 'Welcome'),
+    h(CounterWidget, {})
+  );
+```
+
+Example `src/widgets/CounterWidget.ts`:
+```ts
+import { h, signal } from 'atomica';
+
+export const CounterWidget = () => {
+  const count = signal(0);
+  return h('button', { onClick: () => count.set((c) => c + 1) }, () => `Count: ${count.get()}`);
+};
+```
+
+Example `src/style.css`:
+```css
+body { font-family: system-ui, sans-serif; }
+main { padding: 2rem; }
+```
+
 ## Optional: JSX
 If you want JSX, add to `tsconfig.json`:
 ```json
@@ -110,7 +170,7 @@ export default defineConfig({
 });
 ```
 
-For multiple entry points, add multiple HTML files. Each HTML file references its own entry module:
+For multiple entry points, add multiple HTML files in your source. Each HTML file references its own entry module:
 ```html
 <!-- index.html -->
 <div id="app"></div>
@@ -121,4 +181,42 @@ For multiple entry points, add multiple HTML files. Each HTML file references it
 <script type="module" src="/src/admin.ts"></script>
 ```
 
-Vite will build both pages into `dist/` with separate bundles.
+Vite will build both pages into `dist/` with separate bundles and replace the script tags with built asset paths.
+
+## CSS preprocessing (optional)
+Vite supports preprocessors out of the box. Install what you need and import the file.
+
+Sass/SCSS:
+```
+pnpm add -D sass
+```
+```ts
+import './style.scss';
+```
+
+Less:
+```
+pnpm add -D less
+```
+```ts
+import './style.less';
+```
+
+PostCSS (autoprefixer example):
+```
+pnpm add -D postcss autoprefixer
+```
+```js
+// postcss.config.js
+export default {
+  plugins: {
+    autoprefixer: {}
+  }
+};
+```
+
+CSS Modules:
+```ts
+import styles from './widget.module.css';
+h('button', { class: styles.button }, 'Click');
+```
