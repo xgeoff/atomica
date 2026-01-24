@@ -89,23 +89,27 @@ export function ProfileEditor() {
 ```ts
 import { h, resource, signal } from 'atomica';
 
-export const ProfileEditor = () => {
+export function ProfileEditor() {
   const name = signal('');
+
   async function save() {
     const response = await fetch('/api/profile', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name.get() })
     });
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
+
     try {
       return await response.json();
     } catch {
       return true;
     }
   }
+
   const saveResource = resource(save, { auto: false });
 
   return h(
@@ -113,7 +117,8 @@ export const ProfileEditor = () => {
     null,
     h('input', {
       value: () => name.get(),
-      onInput: (e: Event) => name.set((e.target as HTMLInputElement).value)
+      onInput: (e: Event) =>
+        name.set((e.target as HTMLInputElement).value)
     }),
     h('button', { onClick: () => saveResource.refresh() }, 'Save'),
     h('span', null, () => {
@@ -122,7 +127,7 @@ export const ProfileEditor = () => {
       return saveResource.data() ? 'saved' : 'idle';
     })
   );
-};
+}
 ```
 
 ### Key differences in the complex case
