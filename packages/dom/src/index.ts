@@ -1,5 +1,5 @@
 import { __DEV__, Disposer, devWarn, isArray, isFunction } from '@atomica/shared';
-import { effect } from '../../signals/src/index.ts';
+import { effect, type Signal } from '../../signals/src/index.ts';
 import { initDevDiagnostics, getDevDiagnostics } from '@atomica/shared';
 import { getDevHooks } from './devhooks.js';
 // PUBLIC API — v0.2 LOCKED
@@ -163,6 +163,16 @@ export function bindProp(el: any, name: string, expr: () => any): Disposer {
     const value = expr();
     setProp(el, name, value);
   });
+}
+
+// PUBLIC API — v0.2 LOCKED
+export function bindInput(sig: Signal<string>): { value: () => string; onInput: (e: Event) => void } {
+  return {
+    value: () => sig.get(),
+    onInput: (e: Event) => {
+      sig.set((e.target as HTMLInputElement).value);
+    }
+  };
 }
 
 export function bindChildRange(

@@ -5,7 +5,7 @@ This page collects small, composable patterns built from Atomica primitives and 
 ## Drop-in component (self-contained widget)
 A component can be a self-contained widget that owns its HTML, CSS, and JS and mounts into a single DOM node.
 ```ts
-import { h, mount, signal } from 'atomica';
+import { bindInput, h, mount, signal } from 'atomica';
 
 const MyWidget = () => {
   const count = signal(0);
@@ -25,6 +25,20 @@ const MyWidget = () => {
 
 const target = document.getElementById('my-widget');
 if (target) mount(h(MyWidget, {}), target);
+```
+
+## bindInput (ergonomic input wiring)
+`bindInput` reduces boilerplate for text inputs by returning `value` and `onInput` props:
+```ts
+import { bindInput, h, signal } from 'atomica';
+
+const name = signal('');
+
+const View = () =>
+  h('input', {
+    placeholder: 'Name',
+    ...bindInput(name)
+  });
 ```
 
 ## Create a model from multiple fields

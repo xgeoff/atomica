@@ -141,3 +141,13 @@ const View = () =>
 If you want a smaller surface, ignore it. Atomica remains fully usable without Companion.
 
 See `docs/usage-patterns.md` for complete usage recipes.
+
+### Helper: bindInput
+`bindInput` is a tiny helper for text inputs. It returns `value` and `onInput` props wired to a `Signal<string>`:
+```ts
+import { bindInput, signal } from 'atomica';
+
+const name = signal('');
+const props = bindInput(name);
+// h('input', props)
+```

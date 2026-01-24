@@ -87,7 +87,7 @@ export function ProfileEditor() {
 
 ### Atomica
 ```ts
-import { h, resource, signal } from 'atomica';
+import { bindInput, h, resource, signal } from 'atomica';
 
 export function ProfileEditor() {
   const name = signal('');
@@ -115,11 +115,7 @@ export function ProfileEditor() {
   return h(
     'section',
     null,
-    h('input', {
-      value: () => name.get(),
-      onInput: (e: Event) =>
-        name.set((e.target as HTMLInputElement).value)
-    }),
+    h('input', bindInput(name)),
     h('button', { onClick: () => saveResource.refresh() }, 'Save'),
     h('span', null, () => {
       if (saveResource.loading()) return 'saving';
