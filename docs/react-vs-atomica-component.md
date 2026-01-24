@@ -91,15 +91,21 @@ import { h, resource, signal } from 'atomica';
 
 export const ProfileEditor = () => {
   const name = signal('');
-  const save = async () => {
-    const res = await fetch('/api/profile', {
+  async function save() {
+    const response = await fetch('/api/profile', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name.get() })
     });
-    if (!res.ok) throw new Error('Save failed');
-    return true;
-  };
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    try {
+      return await response.json();
+    } catch {
+      return true;
+    }
+  }
   const saveResource = resource(save, { auto: false });
 
   return h(
