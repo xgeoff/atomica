@@ -78,7 +78,7 @@
     <header class="hero">
       <h1><img src="./favicon.png" alt="Atomica" style="height:64px; vertical-align:middle; margin-right:8px;">Atomica v0.2 — Overview and Map</h1>
       <p class="lead">Atomica is a tiny, signal-first view library with fine-grained DOM bindings. Components are plain functions; state changes update only the nodes that depend on that state. No renders, no lifecycles, no hooks.</p>
-      <p><a href="https://github.com/xgeoff/atomica" target="_blank" rel="noreferrer">Repository: github.com/xgeoff/atomica</a></p>
+      <p><strong>v0.3 semantics locked</strong> · <a href="https://github.com/xgeoff/atomica" target="_blank" rel="noreferrer">Repository: github.com/xgeoff/atomica</a></p>
     </header>
 
     <section>
@@ -104,6 +104,7 @@
         <li><a href="creating-a-project.html">Creating a Project</a> — step-by-step setup with Vite.</li>
         <li><a href="usage-patterns.html">Usage Patterns</a> — small composable recipes.</li>
         <li><a href="react-vs-atomica-component.html">React vs Atomica Component</a> — compare and contrast.</li>
+        <li><a href="api.html">API Reference</a> — deep dive on each export.</li>
         <li>Sample code used in docs/playground (counter, no-rerender, keyed list, search widget, bind-input): see <code>docs/samples/*.ts</code>.</li>
       </ul>
     </section>
@@ -134,6 +135,7 @@
       </ul>
 
       <h3>DOM</h3>
+      <p>Core DOM helpers are exported from <code>atomica/dom</code>. See the <a href="api.html#dom">API reference</a> for complete props and diagnostics.</p>
       <pre><code class="language-ts">import { h, mount, Fragment, context } from 'atomica/dom';</code></pre>
       <ul>
         <li><code>h(type, props, ...children)</code> creates a VNode (tag or component fn)</li>
@@ -184,7 +186,7 @@
     </section>
 
     <section>
-      <h2>Status (v0.1 locked)</h2>
+      <h2>Status (v0.3 semantics locked)</h2>
       <ul>
         <li>Components execute once; fine-grained updates only</li>
         <li>Signals/computed/effect/batch/untrack stable</li>
