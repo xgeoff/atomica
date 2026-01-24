@@ -1,5 +1,5 @@
 import { __DEV__, Disposer, devWarn, isArray, isFunction } from '@atomica/shared';
-import { effect, type Signal } from '../../signals/src/index.ts';
+import { effect, type Signal } from '@atomica/signals';
 import { initDevDiagnostics, getDevDiagnostics } from '@atomica/shared';
 import { getDevHooks } from './devhooks.js';
 // PUBLIC API — v0.2 LOCKED
@@ -158,7 +158,7 @@ export function bindAttr(el: Element, name: string, expr: () => any): Disposer {
   });
 }
 
-export function bindProp(el: any, name: string, expr: () => any): Disposer {
+export function bindPropEffect(el: any, name: string, expr: () => any): Disposer {
   return effect(() => {
     const value = expr();
     setProp(el, name, value);
@@ -166,13 +166,22 @@ export function bindProp(el: any, name: string, expr: () => any): Disposer {
 }
 
 // PUBLIC API — v0.2 LOCKED
-export function bindInput(sig: Signal<string>): { value: () => string; onInput: (e: Event) => void } {
+export function bindProp<T>(sig: Signal<T>, prop: 'value' | 'checked'): {
+  value: () => T;
+  onInput: (event: Event) => void;
+} {
   return {
-    value: () => sig.get(),
-    onInput: (e: Event) => {
-      sig.set((e.target as HTMLInputElement).value);
+    [prop]: () => sig.get(),
+    onInput: (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const next = prop === 'checked' ? target.checked : target.value;
+      sig.set(next as any);
     }
   };
+}
+
+export function bindInput(sig: Signal<string>): { value: () => string; onInput: (e: Event) => void } {
+  return bindProp(sig, 'value');
 }
 
 export function bindChildRange(
@@ -409,7 +418,7 @@ function applyProps(
       return;
     }
     if (isFunction(value)) {
-      disposers.push(bindProp(el, name, value));
+      disposers.push(bindPropEffect(el, name, value as () => any));
       return;
     }
     setProp(el, name, value);

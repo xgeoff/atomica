@@ -41,6 +41,18 @@ const View = () =>
   });
 ```
 
+## bindProp (value + checked helpers)
+`bindProp` is the generic helper for wiring signals to DOM properties:
+```ts
+import { bindProp, h, signal } from 'atomica';
+
+const name = signal('');
+const done = signal(false);
+
+h('input', { type: 'text', ...bindProp(name, 'value') });
+h('input', { type: 'checkbox', ...bindProp(done, 'checked') });
+```
+
 ## Create a model from multiple fields
 When you have multiple inputs bound to a single model, build the payload at click time and send it through the service. The response can update a shared signal:
 ```ts

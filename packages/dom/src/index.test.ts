@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { h, mount } from './index';
+import { bindProp, h, mount } from './index';
 import { signal } from '@atomica/signals';
 import { jsx, jsxs } from './jsx-runtime';
 import { setDevHooks } from './devhooks';
@@ -139,5 +139,51 @@ describe('JSX neutrality', () => {
 
     dispose();
     disposeHook();
+  });
+});
+
+describe('binding helpers', () => {
+  it('binds text input to signal via bindProp', async () => {
+    const value = signal('hello');
+    const container = document.createElement('div');
+    const dispose = mount(h('input', { ...bindProp(value, 'value') }), container, { dev: true });
+
+    const input = container.querySelector('input') as HTMLInputElement;
+    expect(input.value).toBe('hello');
+
+    value.set('updated');
+    await flush();
+    expect(input.value).toBe('updated');
+
+    input.value = 'typed';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await flush();
+    expect(value.get()).toBe('typed');
+
+    dispose();
+  });
+
+  it('binds checkbox to signal via bindProp', async () => {
+    const checked = signal(false);
+    const container = document.createElement('div');
+    const dispose = mount(
+      h('input', { type: 'checkbox', ...bindProp(checked, 'checked') }),
+      container,
+      { dev: true }
+    );
+
+    const input = container.querySelector('input') as HTMLInputElement;
+    expect(input.checked).toBe(false);
+
+    checked.set(true);
+    await flush();
+    expect(input.checked).toBe(true);
+
+    input.checked = false;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    await flush();
+    expect(checked.get()).toBe(false);
+
+    dispose();
   });
 });
