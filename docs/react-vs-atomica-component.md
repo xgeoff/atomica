@@ -124,6 +124,49 @@ export function ProfileEditor() {
     })
   );
 }
+
+### Atomica (JSX)
+```tsx
+import { bindInput, resource, signal } from 'atomica';
+
+export function ProfileEditor() {
+  const name = signal('');
+
+  async function save() {
+    const response = await fetch('/api/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name.get() })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    try {
+      return await response.json();
+    } catch {
+      return true;
+    }
+  }
+
+  const saveResource = resource(save, { auto: false });
+
+  return (
+    <section>
+      <input {...bindInput(name)} />
+      <button onClick={() => saveResource.refresh()}>Save</button>
+      <span>
+        {() => {
+          if (saveResource.loading()) return 'saving';
+          if (saveResource.error()) return 'error';
+          return saveResource.data() ? 'saved' : 'idle';
+        }}
+      </span>
+    </section>
+  );
+}
+```
 ```
 
 ### Key differences in the complex case
