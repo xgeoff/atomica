@@ -124,6 +124,7 @@ export function ProfileEditor() {
     })
   );
 }
+```
 
 ### Atomica (JSX)
 ```tsx
@@ -167,7 +168,7 @@ export function ProfileEditor() {
   );
 }
 ```
-```
+
 
 ### Key differences in the complex case
 - React stores all state in hooks and re-runs on each change.
