@@ -83,3 +83,105 @@ Key contrasts:
 Use the same structure for other frameworks: show their idiomatic snippet, then the Atomica take with the behavioral differences called out.
 
 Add sections for React, Vue, Solid, Atomica, etc., so we can highlight where data flow or ergonomics differ.
+
+## React
+
+A minimal React hook-based version of the same counter list:
+
+```tsx
+import { useState, useMemo } from 'react';
+
+export function Demo() {
+  const [numbers, setNumbers] = useState([1, 2, 3, 4]);
+  const total = useMemo(() => numbers.reduce((sum, n) => sum + n, 0), [numbers]);
+
+  function addNumber() {
+    setNumbers((list) => [...list, list.length + 1]);
+  }
+
+  return (
+    <>
+      <p>{numbers.join(' + ')} = {total}</p>
+      <button onClick={addNumber}>Add a number</button>
+    </>
+  );
+}
+```
+
+### Atomica rewrite
+
+Use the same signal-based component from the Svelte example:
+
+```ts
+import { Fragment, h, mount, signal, computed } from 'atomica';
+
+const Demo = () => {
+  const numbers = signal([1, 2, 3, 4]);
+  const total = computed(() => numbers.get().reduce((sum, n) => sum + n, 0));
+
+  function addNumber() {
+    numbers.set((list) => [...list, list.length + 1]);
+  }
+
+  return h(Fragment, null,
+    h('p', null, () => numbers.get().join(' + '), ' = ', () => total.get()),
+    h('button', { onClick: addNumber }, 'Add a number')
+  );
+};
+```
+
+Key contrasts:
+
+- React re-renders the component whenever state changes; Atomica runs the component once and only re-evaluates the bound expressions.
+- React needs `useMemo` to avoid re-calculating `total` on every render; Atomica’s `computed` is lazy and only runs when `total.get()` is read.
+- JSX looks similar, but React JSX compiles to `React.createElement` (vDOM), while Atomica JSX compiles directly to `h()` with fine-grained bindings.
+
+## Vue
+
+Vue’s `<script setup>` version:
+
+```vue
+<script setup>
+import { ref, computed } from 'vue';
+
+const numbers = ref([1, 2, 3, 4]);
+const total = computed(() => numbers.value.reduce((sum, n) => sum + n, 0));
+
+function addNumber() {
+  numbers.value = [...numbers.value, numbers.value.length + 1];
+}
+</script>
+
+<template>
+  <p>{{ numbers.join(' + ') }} = {{ total }}</p>
+  <button @click="addNumber">Add a number</button>
+</template>
+```
+
+### Atomica rewrite
+
+Same as above; signals map closely to Vue refs:
+
+```ts
+import { Fragment, h, signal, computed } from 'atomica';
+
+const Demo = () => {
+  const numbers = signal([1, 2, 3, 4]);
+  const total = computed(() => numbers.get().reduce((sum, n) => sum + n, 0));
+
+  function addNumber() {
+    numbers.set((list) => [...list, list.length + 1]);
+  }
+
+  return [
+    h('p', null, () => numbers.get().join(' + '), ' = ', () => total.get()),
+    h('button', { onClick: addNumber }, 'Add a number')
+  ];
+};
+```
+
+Key contrasts:
+
+- Vue has a compiler and template syntax; Atomica stays in plain JS/TS, so the reactivity is explicit in `signal`/`computed` and `() =>` bindings.
+- Vue refs need `.value` when read/written; Atomica uses `get()/set()` to keep dependencies precise.
+- Updates in Vue trigger component re-renders (scope is optimized but still driven by the template); Atomica updates only the nodes whose bindings read the changed signals.
