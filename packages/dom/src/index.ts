@@ -166,8 +166,20 @@ export function bindPropEffect(el: any, name: string, expr: () => any): Disposer
 }
 
 // PUBLIC API — v0.2 LOCKED
-export function bindProp<T>(sig: Signal<T>, prop: 'value' | 'checked'): {
-  value: () => T;
+export function bindProp(sig: Signal<string>, prop: 'value'): {
+  value: () => string;
+  onInput: (event: Event) => void;
+};
+export function bindProp(sig: Signal<boolean>, prop: 'checked'): {
+  checked: () => boolean;
+  onInput: (event: Event) => void;
+};
+export function bindProp(
+  sig: Signal<string> | Signal<boolean>,
+  prop: 'value' | 'checked'
+): {
+  value?: () => string;
+  checked?: () => boolean;
   onInput: (event: Event) => void;
 } {
   return {

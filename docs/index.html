@@ -121,6 +121,22 @@
     </section>
 
     <section>
+      <h2>Install and Include</h2>
+      <p>Install Atomica from npm in your project:</p>
+      <pre><code class="language-bash">npm install atomica
+# or: pnpm add atomica
+# or: yarn add atomica
+# or: bun add atomica</code></pre>
+
+      <p>Then import what you need in your app entry file:</p>
+      <pre><code class="language-ts">import { h, mount, signal, computed, effect } from 'atomica';</code></pre>
+
+      <p>Or import explicit subpaths:</p>
+      <pre><code class="language-ts">import { signal, computed, effect, resource } from 'atomica/signals';
+import { h, mount, Fragment, context } from 'atomica/dom';</code></pre>
+    </section>
+
+    <section>
       <h2>Core APIs (v0.3)</h2>
 
       <h3>Signals</h3>

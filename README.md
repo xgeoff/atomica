@@ -16,6 +16,30 @@ Atomica is a tiny view library built on signals. Components are plain functions;
 - `atomica/signals` — `signal`, `computed`, `effect`, `resource` (helpers `batch`/`untrack` are internal escape hatches)
 - `atomica/dom` — `h`, `fragment/Fragment`, `text`, `mount`, `unmount`, `context`, bindings
 
+## Install and include in your project
+
+Install from npm:
+
+```bash
+npm install atomica
+# or: pnpm add atomica
+# or: yarn add atomica
+# or: bun add atomica
+```
+
+Include Atomica in your app entry file:
+
+```ts
+import { h, mount, signal, computed, effect } from 'atomica';
+```
+
+Use subpath imports when you want explicit modules:
+
+```ts
+import { signal, computed, effect, resource } from 'atomica/signals';
+import { h, mount, Fragment, context } from 'atomica/dom';
+```
+
 ## Quick start
 
 index.html
