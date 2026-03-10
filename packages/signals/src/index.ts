@@ -5,7 +5,7 @@ import {
   isFunction,
   getDevDiagnostics,
   initDevDiagnostics
-} from '@atomica/shared';
+} from 'atomica-shared';
 
 // PUBLIC API — v0.2 LOCKED
 export interface ReadonlySignal<T> {

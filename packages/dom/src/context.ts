@@ -1,4 +1,4 @@
-import { __DEV__, invariant } from '@atomica/shared';
+import { __DEV__, invariant } from 'atomica-shared';
 
 // PUBLIC API — v0.2 LOCKED
 export interface Context<T> {

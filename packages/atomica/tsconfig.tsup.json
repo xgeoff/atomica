@@ -7,9 +7,9 @@
     "incremental": false,
     "allowImportingTsExtensions": true,
     "paths": {
-      "@atomica/dom": ["../dom/src/index.ts"],
-      "@atomica/signals": ["../signals/src/index.ts"],
-      "@atomica/shared": ["../shared/src/index.ts"]
+      "atomica-dom": ["../dom/src/index.ts"],
+      "atomica-signals": ["../signals/src/index.ts"],
+      "atomica-shared": ["../shared/src/index.ts"]
     }
   },
   "include": ["src/**/*", "../dom/src/**/*", "../signals/src/**/*", "../shared/src/**/*"]

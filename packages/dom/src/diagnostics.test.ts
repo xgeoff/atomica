@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { h, mount } from './index';
-import { signal } from '@atomica/signals';
-import { initDevDiagnostics } from '@atomica/shared';
+import { signal } from 'atomica-signals';
+import { initDevDiagnostics } from 'atomica-shared';
 
 const flush = () => Promise.resolve();
 

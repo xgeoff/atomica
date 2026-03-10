@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { bindProp, h, mount } from './index';
-import { signal } from '@atomica/signals';
+import { signal } from 'atomica-signals';
 import { jsx, jsxs } from './jsx-runtime';
 import { setDevHooks } from './devhooks';
 

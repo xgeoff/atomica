@@ -1,6 +1,6 @@
 {
   "name": "atomica",
-  "version": "0.3.0-alpha",
+  "version": "0.4.0-alpha",
   "type": "module",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.esm.js",
@@ -34,9 +34,9 @@
       "require": "./dist/dom/jsx-runtime.cjs.js"
     },
     "./dom/jsx-dev-runtime": {
-      "types": "./dist/dom-jsx-runtime.d.ts",
+      "types": "./dist/dom/jsx-runtime.d.ts",
       "import": "./dist/dom/jsx-runtime.esm.js",
-      "require": "./dist/dom-jsx-runtime.cjs.js"
+      "require": "./dist/dom/jsx-runtime.cjs.js"
     }
   },
   "scripts": {
@@ -44,8 +44,9 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@atomica/dom": "workspace:*",
-    "@atomica/signals": "workspace:*"
+    "atomica-dom": "0.4.0-alpha",
+    "atomica-shared": "0.4.0-alpha",
+    "atomica-signals": "0.4.0-alpha"
   },
   "devDependencies": {
     "tsup": "^8.5.1"

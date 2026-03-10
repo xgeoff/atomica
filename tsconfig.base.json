@@ -19,9 +19,9 @@
       "atomica/dom/jsx-runtime": ["packages/atomica/src/dom-jsx-runtime.ts"],
       "atomica/dom/jsx-dev-runtime": ["packages/atomica/src/dom-jsx-runtime.ts"],
       "atomica/shared": ["packages/shared/src/index.ts"],
-      "@atomica/shared": ["packages/shared/src/index.ts"],
-      "@atomica/signals": ["packages/signals/src/index.ts"],
-      "@atomica/dom": ["packages/dom/src/index.ts"]
+      "atomica-shared": ["packages/shared/src/index.ts"],
+      "atomica-signals": ["packages/signals/src/index.ts"],
+      "atomica-dom": ["packages/dom/src/index.ts"]
     }
   }
 }

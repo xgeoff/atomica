@@ -1,4 +1,4 @@
-import { __DEV__ } from '@atomica/shared';
+import { __DEV__ } from 'atomica-shared';
 
 export type DevHooks = {
   onComponentRender?: (component: (...args: any[]) => any) => void;

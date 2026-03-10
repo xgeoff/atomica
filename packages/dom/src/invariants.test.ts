@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { context, h, mount } from './index';
-import { signal } from '@atomica/signals';
+import { signal } from 'atomica-signals';
 
 const flush = () => Promise.resolve();
 

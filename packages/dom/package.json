@@ -1,9 +1,10 @@
 {
-  "name": "@atomica/dom",
-  "version": "0.3.0-alpha",
+  "name": "atomica-dom",
+  "version": "0.4.0-alpha",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": ["dist"],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -20,10 +21,14 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "pnpm build",
     "test": "vitest"
   },
   "dependencies": {
-    "@atomica/shared": "workspace:*",
-    "@atomica/signals": "workspace:*"
+    "atomica-shared": "0.4.0-alpha",
+    "atomica-signals": "0.4.0-alpha"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -10,10 +10,10 @@ export default defineConfig({
   },
   tsconfig: './tsconfig.tsup.json',
   format: ['esm', 'cjs'],
-  dts: { resolve: false, tsconfig: './tsconfig.tsup.json' },
+  dts: { resolve: true, tsconfig: './tsconfig.tsup.json' },
   sourcemap: true,
   clean: true,
-  noExternal: ['@atomica/dom', '@atomica/signals', '@atomica/shared'],
+  noExternal: ['atomica-dom', 'atomica-signals', 'atomica-shared'],
   outDir: 'dist',
   outExtension({ format }) {
     return {

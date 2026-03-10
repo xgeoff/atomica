@@ -1,1 +1,1 @@
-export * from '@atomica/dom/jsx-runtime';
+export * from '../../dom/src/jsx-runtime.ts';

@@ -1,6 +1,6 @@
-import { __DEV__, Disposer, devWarn, isArray, isFunction } from '@atomica/shared';
-import { effect, type Signal } from '@atomica/signals';
-import { initDevDiagnostics, getDevDiagnostics } from '@atomica/shared';
+import { __DEV__, Disposer, devWarn, isArray, isFunction } from 'atomica-shared';
+import { effect, type Signal } from 'atomica-signals';
+import { initDevDiagnostics, getDevDiagnostics } from 'atomica-shared';
 import { getDevHooks } from './devhooks.js';
 // PUBLIC API — v0.2 LOCKED
 export { context } from './context.js';
